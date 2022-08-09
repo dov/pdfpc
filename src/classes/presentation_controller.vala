@@ -1170,6 +1170,13 @@ namespace pdfpc {
             this.set_mode(AnnotationMode.parse(mode_variant.get_string()));
         }
 
+        public void toggle_eraser() {
+            if (this.annotation_mode == PEN)
+                set_mode(ERASER);
+            else
+                set_mode(PEN);
+        }
+
         protected void add_actions() {
             add_action("next", this.next_page,
                 "Go to the next slide");
@@ -1253,6 +1260,9 @@ namespace pdfpc {
                 this.set_mode_to_string,
                 "Switch annotation mode (normal|pointer|pen|eraser|spotlight)",
                 "mode");
+
+            add_action("toggleEraser", this.toggle_eraser,
+                       "Quick toggle between eraser and pen mode");
 
             add_action("increaseSize", this.increase_size,
                 "Increase the size of notes|pointer|pen|eraser");
@@ -1866,6 +1876,7 @@ namespace pdfpc {
          */
         public void undo() {
             this.pen_drawing.undo();
+            this.update_request();
         }
 
         /**
@@ -1873,6 +1884,7 @@ namespace pdfpc {
          */
         public void redo() {
             this.pen_drawing.redo();
+            this.update_request();
         }
 
         /**
